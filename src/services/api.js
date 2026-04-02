@@ -38,7 +38,9 @@ export const authAPI = {
   signup: (userData) => api.post('/api/auth/signup', userData),
   login: (credentials) => api.post('/api/auth/login', credentials),
   logout: () => api.post('/api/auth/logout'),
-  getMe: () => api.get('/api/auth/me'),
+  getMe: () => api.get('/api/auth/me',{
+    withCredentials:true
+  }),
   getRewards: (userId) => api.get(`/api/auth/rewards/${userId}`),
   forgotPassword: (email) => api.post(`/api/auth/forgot-password?email=${email}`),
   resetPassword: (data) => api.post('/api/auth/reset-password', data),
