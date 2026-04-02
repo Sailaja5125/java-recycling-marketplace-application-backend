@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8081';
+const API_BASE_URL = 'https://java-recycling-marketplace-application.onrender.com/';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
