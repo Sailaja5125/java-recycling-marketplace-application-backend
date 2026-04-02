@@ -1,6 +1,5 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import { createContext, useState, useContext, useEffect } from 'react';
 import { authAPI } from '../services/api';
-import { set } from 'date-fns';
 
 const AuthContext = createContext(null);
 
