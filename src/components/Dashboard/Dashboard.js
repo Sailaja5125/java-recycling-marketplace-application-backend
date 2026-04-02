@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { userDetailsAPI, authAPI } from '../../services/api';
 import PickupForm from './PickupForm';
@@ -12,10 +12,6 @@ const Dashboard = () => {
   const [rewards, setRewards] = useState(user?.rewards || 0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
-  useEffect(() => {
-    loadUserData();
-  }, [user?.id]);
 
   const loadUserData = async () => {
     if (!user?.id) return;
@@ -53,6 +49,13 @@ const Dashboard = () => {
       setLoading(false);
     }
   };
+
+
+  useEffect(() => {
+    loadUserData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
+
 
   return (
     <div className="dashboard-container">
