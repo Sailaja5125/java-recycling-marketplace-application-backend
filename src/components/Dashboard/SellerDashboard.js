@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { sellerAPI, productsAPI } from '../../services/api';
 import AddProductForm from './AddProductForm';
@@ -12,11 +12,6 @@ const SellerDashboard = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  useEffect(() => {
-    if (user?.email) {
-      loadOrders();
-    }
-  }, [user]);
 
   const loadOrders = async () => {
     try {
@@ -32,6 +27,12 @@ const SellerDashboard = () => {
     }
   };
 
+  useEffect(() => {
+    if (user?.email) {
+      loadOrders();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
   const handleAddProduct = async (productData) => {
     try {
       setLoading(true);
@@ -56,6 +57,8 @@ const SellerDashboard = () => {
   if (loading && orders.length === 0 && !showAddForm) {
     return <div className="loading-container"><div className="spinner"></div><p>Loading your dashboard...</p></div>;
   }
+
+  
 
   return (
     <div className="dashboard-container">

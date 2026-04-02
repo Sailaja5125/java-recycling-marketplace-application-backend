@@ -10,11 +10,6 @@ const Orders = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (user?.id) {
-      loadOrders();
-    }
-  }, [user?.id]);
 
   const loadOrders = async () => {
     if (!user?.id) return;
@@ -32,6 +27,12 @@ const Orders = () => {
     }
   };
 
+  useEffect(() => {
+    if (user?.id) {
+      loadOrders();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
   const handleCancelOrder = async (orderId) => {
     if (!window.confirm('Are you sure you want to cancel this order? Points will be refunded.')) {
       return;
