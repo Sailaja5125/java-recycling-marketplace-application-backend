@@ -19,19 +19,27 @@ const Navbar = () => {
           <span className="logo-icon" aria-hidden="true">♻️</span>
           <span>RecycleMarket</span>
         </Link>
-        
+
         <div className="navbar-menu">
           {isAuthenticated ? (
             <>
-              <Link to="/dashboard" className="nav-link" aria-label="Go to dashboard">
-                Dashboard
-              </Link>
-              <Link to="/products" className="nav-link" aria-label="View all products">
-                Products
-              </Link>
-              <Link to="/orders" className="nav-link" aria-label="View my orders">
-                My Orders
-              </Link>
+              {(!user?.role || user?.role === 'USER') && (
+                <>
+                  <Link to="/dashboard" className="nav-link">Dashboard</Link>
+                  <Link to="/products" className="nav-link">Products</Link>
+                  <Link to="/orders" className="nav-link">My Orders</Link>
+                </>
+              )}
+              {user?.role === 'SELLER' && (
+                <>
+                  <Link to="/seller-dashboard" className="nav-link">Seller Dashboard</Link>
+                  <Link to="/products" className="nav-link">Marketplace</Link>
+
+                </>
+              )}
+              {user?.role === 'DELIVERY_BOY' && (
+                <Link to="/delivery-tasks" className="nav-link">Delivery Tasks</Link>
+              )}
               <div className="user-info">
                 <span className="user-name" aria-label={`Logged in as ${user?.username || user?.email}`}>
                   {user?.username || user?.email}

@@ -9,6 +9,7 @@ const Signup = () => {
     email: '',
     password: '',
     confirmPassword: '',
+    role: 'USER', // Default role
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -131,6 +132,24 @@ const Signup = () => {
               autoComplete="new-password"
               aria-required="true"
             />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="role" className="form-label">
+              Account Type
+            </label>
+            <select
+              id="role"
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="form-input"
+              aria-required="true"
+            >
+              <option value="USER">Standard User (Recycler)</option>
+              <option value="SELLER">Product Seller</option>
+              <option value="DELIVERY_BOY">Delivery Partner</option>
+            </select>
           </div>
 
           <button

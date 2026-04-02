@@ -57,6 +57,16 @@ const PickupHistory = ({ pickups, loading, onRefresh }) => {
                 </div>
               </div>
             )}
+            
+            <div className="pickup-status" style={{ marginTop: '10px' }}>
+              <strong>Status:</strong> {pickup.status || 'PENDING'}
+              {pickup.status === 'ASSIGNED' && pickup.completionToken && (
+                <div style={{ marginTop: '5px', padding: '8px', backgroundColor: '#e8f0fe', borderRadius: '4px' }}>
+                  <strong>Delivery OTP (Share with delivery partner):</strong> <span style={{fontSize: '1.2em', letterSpacing: '2px', fontWeight: 'bold'}}>{pickup.completionToken}</span>
+                </div>
+              )}
+            </div>
+            
           </div>
         ))}
       </div>

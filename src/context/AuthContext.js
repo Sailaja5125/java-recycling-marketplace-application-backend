@@ -5,27 +5,19 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const initAuth = async () => {
-      const storedToken = localStorage.getItem('token');
-      const storedUser = localStorage.getItem('user');
-      
-      if (storedToken && storedUser) {
-        setToken(storedToken);
-        setUser(JSON.parse(storedUser));
-        try {
-          const response = await authAPI.getMe();
-          setUser(response.data);
-          localStorage.setItem('user', JSON.stringify(response.data));
-        } catch (error) {
-          console.error('Failed to verify token:', error);
-          logout();
-        }
+      try {
+        const response = await authAPI.getMe(); // backend reads cookie
+        setUser(response.data);
+      } catch (error) {
+        console.error('Auth init failed:', error);
+        setUser(null);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     initAuth();
@@ -34,15 +26,14 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await authAPI.login({ email, password });
-      const { token: newToken, user: userData } = response.data;
-      
-      setToken(newToken);
-      setUser(userData);
-      localStorage.setItem('token', newToken);
-      localStorage.setItem('user', JSON.stringify(userData));
-      
+      // backend sets cookie, response contains user info
+      setUser(response.data.user);
       return { success: true };
     } catch (error) {
+      if(error.response?.data === 'Already Loggedin') {
+        setUser(error.response.data.user);
+        return { success: true };
+      }
       return {
         success: false,
         error: error.response?.data || 'Login failed',
@@ -64,33 +55,26 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      if (token) {
-        await authAPI.logout();
-      }
+      await authAPI.logout(); // backend clears cookie
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
-      setToken(null);
       setUser(null);
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
     }
   };
 
   const updateUser = (userData) => {
     setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
   };
 
   const value = {
     user,
-    token,
     loading,
     login,
     signup,
     logout,
     updateUser,
-    isAuthenticated: !!token && !!user,
+    isAuthenticated: !!user,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

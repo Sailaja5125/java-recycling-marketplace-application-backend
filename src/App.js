@@ -11,6 +11,9 @@ import ResetPassword from './components/Auth/ResetPassword';
 import Dashboard from './components/Dashboard/Dashboard';
 import Products from './components/Products/Products';
 import Orders from './components/Orders/Orders';
+import RoleRoute from './components/RoleRoute';
+import SellerDashboard from './components/Dashboard/SellerDashboard';
+import DeliveryDashboard from './components/Dashboard/DeliveryDashboard';
 import './App.css';
 
 function App() {
@@ -42,6 +45,22 @@ function App() {
                     <Orders />
                   </ProtectedRoute>
                 }
+              />
+              <Route 
+                path="/seller-dashboard" 
+                element={
+                  <RoleRoute allowedRoles={['SELLER', 'ADMIN']}>
+                    <SellerDashboard />
+                  </RoleRoute>
+                } 
+              />
+              <Route 
+                path="/delivery-tasks" 
+                element={
+                  <RoleRoute allowedRoles={['DELIVERY_BOY', 'ADMIN']}>
+                    <DeliveryDashboard />
+                  </RoleRoute>
+                } 
               />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
